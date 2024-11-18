@@ -45,13 +45,33 @@ const Button = ({ value }) => {
 
   // User click operation
   const signClick = () => {
-    setCalc({
-      ...calc,
-      sign: value,
-      res: !calc.res && calc.num ? calc.num : calc.res,
-      num: 0,
-    });
+    if (calc.res && calc.sign) {
+      const math = (a, b, sign) => {
+        const result = {
+          "+": (a, b) => a + b,
+          "-": (a, b) => a - b,
+          "x": (a, b) => a * b,
+          "/": (a, b) => a / b,
+        };
+        return result[sign](a, b);
+      };
+  
+      setCalc({
+        ...calc,
+        res: math(calc.res, calc.num, calc.sign), 
+        sign: value,
+        num: 0,
+      });
+    } else {
+      setCalc({
+        ...calc,
+        sign: value,
+        res: calc.num || calc.res,
+        num: 0,
+      });
+    }
   };
+  
 
   // User click equals
   const equalsClick = () => {
